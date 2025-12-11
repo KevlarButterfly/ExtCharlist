@@ -1,0 +1,27 @@
+@ExtCharlist_HostAddress = https://localhost:7189
+
+
+GET {{ExtCharlist_HostAddress}}/api/character
+
+###
+
+GET {{ExtCharlist_HostAddress}}/api/character
+
+###
+
+POST {{ExtCharlist_HostAddress}}/api/character
+Content-Type: application/json
+
+{
+  "CharacterName": "Gimley",
+  "CharacterClass":{
+             "ClassName":"fighter"
+             },
+  "CharacterRace":{
+             "RaceName":"dwarf"
+  }
+
+
+}
+
+###
