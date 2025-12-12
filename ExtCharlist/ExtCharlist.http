@@ -25,3 +25,30 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{ExtCharlist_HostAddress}}/api/character
+
+###
+
+GET {{ExtCharlist_HostAddress}}/api/characterrace
+
+###
+
+POST {{ExtCharlist_HostAddress}}/api/characterrace
+Content-Type: application/json
+
+{
+  "Id":"WRLIGFGEBRGLIAEUGBALIEGBAERLIGABEGRLIAERBGALIU"
+  "RaceName":"Elf"
+}
+
+###
+
+POST {{ExtCharlist_HostAddress}}/api/characterrace
+Content-Type: application/json
+
+{
+  //CharacterRace
+}
+
+###

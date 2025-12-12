@@ -11,12 +11,14 @@ namespace ExtCharlist
             //ExtCharlistRepository? repository = new ExtCharlistRepository();
 
 
-
+            ExtCharlistRepository repository = new ExtCharlistRepository();
+            repository.GetDataAsync();
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.Configure<ExtCharlistDatabaseSettigs>(builder.Configuration.GetSection("ExtCharlistDatabase"));
 
             builder.Services.AddSingleton<CharactersService>();
+            builder.Services.AddSingleton<CharacterRaceService>();
             //repository.GetDataAsync();
             // Add services to the container.
 
@@ -37,8 +39,11 @@ namespace ExtCharlist
 
 
             app.MapControllers();
-
             app.Run();
+            
+            
+
         }
+        
     }
 }
