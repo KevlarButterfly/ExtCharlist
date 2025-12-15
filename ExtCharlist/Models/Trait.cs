@@ -14,8 +14,8 @@ namespace ExtCharlist.Models
         [JsonPropertyName("name")]
         public string TraitName { get; set; }
 
-        [BsonElement("desc")]
-        [JsonPropertyName("desc")]
-        public List<string> TraitDesc { get; set; }
+        [BsonElement("url")]
+        [JsonPropertyName("url")]
+        public string TraitUrl { get; set; }
     }
 }

@@ -13,8 +13,20 @@ namespace ExtCharlist.Models
         [BsonElement("CharacterName")]
         [JsonPropertyName("CharacterName")]
         public string? CharacterName { get; set; }
+
+        [BsonElement("CharacterClass")]
+        [JsonPropertyName("CharacterClass")]
         public CharacterClass? CharacterClass {  get; set; }
+
+        [BsonElement("CharacterRace")]
+        [JsonPropertyName("CharacterRace")]
         public CharacterRace? CharacterRace {  get; set; }
+
+        [BsonElement("CharacterBackground")]
+        [JsonPropertyName("CharacterBackground")]
+
+        public CharacterBackground? CharacterBackground { get; set; }
+
 
     }
 }

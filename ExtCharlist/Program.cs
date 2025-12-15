@@ -20,7 +20,7 @@ namespace ExtCharlist
 
             //settings = config.Bind();
 
-            ExtCharlistRepository? repository = new ExtCharlistRepository();
+            
 
             builder.Services.Configure<ExtCharlistDatabaseSettigs>(builder.Configuration.GetSection("ExtDnDCharlistStore"));
 
@@ -36,9 +36,11 @@ namespace ExtCharlist
 
             var charRaceService = sp.GetService<CharacterRaceService>();
 
-            var app = builder.Build();
+            var charService = sp.GetService<CharactersService>();
 
-            
+            var app = builder.Build();
+            ExtCharlistRepository? repository = new ExtCharlistRepository(charRaceService, charService);
+
 
             repository.WriteAsync();
 

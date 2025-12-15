@@ -12,5 +12,13 @@ namespace ExtCharlist.Models
         [BsonElement("Name")]
         [JsonPropertyName("Name")]
         public string? ClassName { get; set; }
+
+        [BsonElement("hit-die")]
+        [JsonPropertyName("hit-die")]
+        public int ClassHitDice;
+
+        [BsonElement("proficiency_choises")]
+        [JsonPropertyName("proficiency_choises")]
+        public List<ProficiencyChoice>? ClassProficiencyChoices;
     }
 }

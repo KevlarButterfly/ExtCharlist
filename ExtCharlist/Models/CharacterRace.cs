@@ -47,6 +47,6 @@ namespace ExtCharlist.Models
 
         [BsonElement("traits")]
         [JsonPropertyName("traits")]
-        List<Trait>? RaceTraits { get; set; }
+        public List<Trait>? RaceTraits { get; set; }
     }
 }

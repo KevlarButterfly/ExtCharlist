@@ -12,10 +12,10 @@ namespace ExtCharlist.Models
 
         [BsonElement("name")]
         [JsonPropertyName("name")]
-        public string? LanguageName;
+        public string? LanguageName { get; set; }
 
         [BsonElement("url")]
         [JsonPropertyName("url")]
-        public string? LanguageUrl;
+        public string? LanguageUrl { get; set; }
     }
 }

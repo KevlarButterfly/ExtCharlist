@@ -11,7 +11,7 @@ namespace ExtCharlist.Services
         {
             var mongoClient = new MongoClient(extCharlistDatabaseSettings.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(extCharlistDatabaseSettings.Value.DatabaseName);
-            _characterRaceCollection = mongoDatabase.GetCollection<CharacterRace>(extCharlistDatabaseSettings.Value.CharacterCollectionName);
+            _characterRaceCollection = mongoDatabase.GetCollection<CharacterRace>(extCharlistDatabaseSettings.Value.CharacterRaceCollectionName);
 
         }
         public async Task<List<CharacterRace>> GetAsync() =>
