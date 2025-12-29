@@ -9,5 +9,7 @@
         public string CharacterCollectionName { get; set; } = null!;
 
         public string CharacterRaceCollectionName { get; set; } = null!;
+
+        public string UsersCollectionName { get; set; } = null!;
     }
 }

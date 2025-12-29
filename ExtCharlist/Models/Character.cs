@@ -10,6 +10,10 @@ namespace ExtCharlist.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+
+        [BsonElement("UserId")]
+        [JsonPropertyName("UserId")]
+        public string? UserId { get; set; }
         [BsonElement("CharacterName")]
         [JsonPropertyName("CharacterName")]
         public string? CharacterName { get; set; }
@@ -27,6 +31,12 @@ namespace ExtCharlist.Models
 
         public CharacterBackground? CharacterBackground { get; set; }
 
+        [BsonElement("CharacterTraits")]
+        [JsonPropertyName("CharacterTraits")]
+        public List<Trait> CharacterTraits {  get; set; }
+
+        //[BsonElement("Character")]
+        //[JsonPropertyName("CharacterBackground")]
 
     }
 }

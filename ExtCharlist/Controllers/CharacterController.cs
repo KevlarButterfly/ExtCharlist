@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExtCharlist.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class CharacterController : ControllerBase
     {
         private readonly CharactersService _characterService;
@@ -17,6 +17,11 @@ namespace ExtCharlist.Controllers
         [HttpGet]
         public async Task<List<Character>> Get() =>
             await _characterService.GetAsync();
+        [Route("{userId}")]
+        public async Task<List<Character?>> GetByUser([FromRoute]string userId)
+        => await _characterService.GetByUserIdAsync(userId);
+
+
 
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Character>> Get(string id)

@@ -19,7 +19,7 @@ namespace ExtCharlist.Models
 
         [BsonElement("ability_bonuses")]
         [JsonPropertyName("ability_bonuses")]
-        List<Dictionary<string, Dictionary<string, Object>>>? AbilityBonuses { get; set; }
+        public List<Dictionary<string, Dictionary<string, Object>>>? AbilityBonuses { get; set; }
 
         [BsonElement("alignment")]
         [JsonPropertyName("alignment")]

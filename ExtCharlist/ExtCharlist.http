@@ -26,7 +26,7 @@ Content-Type: application/json
 
 ###
 
-GET {{ExtCharlist_HostAddress}}/api/character
+GET {{ExtCharlist_HostAddress}}/api/character/
 
 ###
 
@@ -50,5 +50,35 @@ Content-Type: application/json
 {
   //CharacterRace
 }
+
+###
+
+@userId=string
+GET {{ExtCharlist_HostAddress}}/api/Character/{{userId}}
+
+###
+
+GET {{ExtCharlist_HostAddress}}/api/character/GetByUser/{userId:length(24)}?userId={{userId}}
+
+###
+
+@id=string
+GET {{ExtCharlist_HostAddress}}/api/Character/Get/{{id}}
+
+###
+
+GET {{ExtCharlist_HostAddress}}/api/Character/GetByUser/
+
+###
+
+GET {{ExtCharlist_HostAddress}}/api/character/GetByUser/{{id}}
+
+###
+
+GET {{ExtCharlist_HostAddress}}/{{id}}
+
+###
+
+GET {{ExtCharlist_HostAddress}}/api/Character/GetByUser/ghjj
 
 ###

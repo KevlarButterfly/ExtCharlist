@@ -18,7 +18,7 @@ namespace ExtCharlist.Models
         [JsonPropertyName("choose")]
         public int ChooseNum;
 
-        [BsonElement("")]
-        [JsonPropertyName("")]
+        //[BsonElement("")]
+        //[JsonPropertyName("")]
     }
 }
