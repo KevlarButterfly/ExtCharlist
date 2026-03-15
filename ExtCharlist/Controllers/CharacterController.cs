@@ -1,30 +1,52 @@
-﻿using ExtCharlist.Models;
-using ExtCharlist.Services;
+﻿using ExtCharlistLibrary.Models;
+using ExtCharlistAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ExtCharlistLibrary.DTO;
+using ZstdSharp.Unsafe;
 
-namespace ExtCharlist.Controllers
+namespace ExtCharlistAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class CharacterController : ControllerBase
     {
         private readonly CharactersService _characterService;
+        private readonly Mapper _mapper;
 
-        public CharacterController(CharactersService charactersService) =>
+        public CharacterController(CharactersService charactersService, Mapper mapper) {
             _characterService = charactersService;
+            _mapper = mapper;
+                }
 
         [HttpGet]
-        public async Task<List<Character>> Get() =>
-            await _characterService.GetAsync();
-        [Route("{userId}")]
-        public async Task<List<Character?>> GetByUser([FromRoute]string userId)
-        => await _characterService.GetByUserIdAsync(userId);
+        public async Task<List<CharacterDTO>> Get()
+        {
+            List<Character> characters = await _characterService.GetAsync();
+            List<CharacterDTO> charactersDTO = new ();
 
+            foreach(var character in characters)
+            {
+                charactersDTO.Add(await _mapper.CharacterToCharacterDTO(character));
+            }
+            return charactersDTO;
+        }
+        [Route("{userId}")]
+        public async Task<List<CharacterDTO>> GetByUser([FromRoute] string userId)
+        { 
+            List<Character> characters = await _characterService.GetByUserIdAsync(userId);
+            List<CharacterDTO> charactersDTO = new();
+
+            foreach (var character in characters)
+            {
+                charactersDTO.Add(await _mapper.CharacterToCharacterDTO(character));
+            }
+            return charactersDTO;
+        }
 
 
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Character>> Get(string id)
+        public async Task<ActionResult<CharacterDTO>> Get(string id)
         {
             var book = await _characterService.GetAsync(id);
 
@@ -33,19 +55,20 @@ namespace ExtCharlist.Controllers
                 return NotFound();
             }
 
-            return book;
+            return await _mapper.CharacterToCharacterDTO(book);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Character newCharacter)
+        public async Task<IActionResult> Post(CharacterDTO newCharacterDTO)
         {
+            Character newCharacter = await _mapper.CharacterDTOToCharacter(newCharacterDTO);
             await _characterService.CreateAsync(newCharacter);
 
             return CreatedAtAction(nameof(Get), new { id = newCharacter.Id }, newCharacter);
         }
 
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, Character updatedCharacter)
+        public async Task<IActionResult> Update(string id, CharacterDTO updatedCharacterDTO)
         {
             var character = await _characterService.GetAsync(id);
 
@@ -54,7 +77,9 @@ namespace ExtCharlist.Controllers
                 return NotFound();
             }
 
-            updatedCharacter.Id = character.Id;
+            updatedCharacterDTO.Id = character.Id;
+
+            Character updatedCharacter = await _mapper.CharacterDTOToCharacter(updatedCharacterDTO);
 
             await _characterService.UpdateAsync(id, updatedCharacter);
 
@@ -75,5 +100,10 @@ namespace ExtCharlist.Controllers
 
             return NoContent();
         }
+
+
+
+
+
     }
 }

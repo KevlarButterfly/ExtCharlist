@@ -1,11 +1,12 @@
-﻿using ExtCharlist.Models;
+﻿using ExtCharlistLibrary.DTO;
+using ExtCharlistLibrary.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 
 
 
-namespace ExtCharlist.Services
+namespace ExtCharlistAPI.Services
 {
     public class CharactersService
     {

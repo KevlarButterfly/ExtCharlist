@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11512.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharlistAPI", "ExtCharlist\ExtCharlistAPI.csproj", "{5E5699B5-CC0B-4784-B512-171DB60CF242}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharlistWebApp", "ExtCharlistWebApp\ExtCharlistWebApp\ExtCharlistWebApp.csproj", "{ADD24BD4-5141-4579-9D94-88481F6D456D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{0D41EB00-6005-49D6-B737-147CCA064F01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharlistWebApp.Client", "ExtCharlistWebApp\ExtCharlistWebApp.Client\ExtCharlistWebApp.Client.csproj", "{A3CC7B9D-C386-46F8-B352-0824977A232E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharlistLibrary", "ExtCharlistLibrary\ExtCharlistLibrary.csproj", "{51930FE5-DD1C-4466-A91C-5DE8113A197C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharistWebApp", "CharListWebApp\ExtCharistWebApp.csproj", "{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +21,14 @@ Global
 		{5E5699B5-CC0B-4784-B512-171DB60CF242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E5699B5-CC0B-4784-B512-171DB60CF242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E5699B5-CC0B-4784-B512-171DB60CF242}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADD24BD4-5141-4579-9D94-88481F6D456D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADD24BD4-5141-4579-9D94-88481F6D456D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADD24BD4-5141-4579-9D94-88481F6D456D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADD24BD4-5141-4579-9D94-88481F6D456D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3CC7B9D-C386-46F8-B352-0824977A232E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3CC7B9D-C386-46F8-B352-0824977A232E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3CC7B9D-C386-46F8-B352-0824977A232E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3CC7B9D-C386-46F8-B352-0824977A232E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51930FE5-DD1C-4466-A91C-5DE8113A197C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51930FE5-DD1C-4466-A91C-5DE8113A197C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51930FE5-DD1C-4466-A91C-5DE8113A197C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51930FE5-DD1C-4466-A91C-5DE8113A197C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

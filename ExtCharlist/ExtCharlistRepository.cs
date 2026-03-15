@@ -3,12 +3,13 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using ExtCharlist.Controllers;
-using ExtCharlist.Models;
-using ExtCharlist.Services;
+using ExtCharlistLibrary.Models;
+using ExtCharlistAPI.Services;
+using ExtCharlistAPI.Controllers;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 
-namespace ExtCharlist
+namespace ExtCharlistAPI
 {
     public class ExtCharlistRepository
     {

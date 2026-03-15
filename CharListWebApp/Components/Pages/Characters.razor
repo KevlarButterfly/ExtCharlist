@@ -1,0 +1,34 @@
+﻿@page "/{UserId}/characters/"
+@using ExtCharlistWebApp.Services
+@using ExtCharlistLibrary.DTO
+@inject ICharacterService CharacterService
+<PageTitle>huh?</PageTitle>
+@if (characters is null){
+    <h1>нема результатов</h1>;
+}
+else{
+    @foreach(CharacterDTO character in characters){
+        <div @onclick="e=> await RedirectAsync(">
+        <h1>Character:@character.CharacterName</h1>
+        <ul>
+            <li>Race:@character.CharacterRace.RaceName</li>
+            <li>Class:@character.CharacterClass.ClassName</li>
+            <a href="#"></a>
+        </ul>
+        </div>
+    }
+}
+@code {
+    IEnumerable<CharacterDTO>? characters;
+    [Parameter]
+    public string? UserId { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        characters = await CharacterService.GetCharactersAsync(UserId);
+    }
+
+    protected async Task RedirectToCharacterAsync(string id)
+    {
+        return Redire
+    }
+    }

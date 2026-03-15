@@ -1,14 +1,14 @@
-using ExtCharlist.Models;
-using ExtCharlist.Services;
+using ExtCharlistLibrary.Models;
+using ExtCharlistAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace ExtCharlist
+namespace ExtCharlistAPI
 {
     public class Program
     {
-        private static IOptions<ExtCharlistDatabaseSettigs> settigs;
+        private static IOptions<ExtCharlistDatabaseSettigs> settings;
 
         public static void Main(string[] args)
         {
@@ -26,6 +26,8 @@ namespace ExtCharlist
 
             builder.Services.AddSingleton<CharactersService>();
             builder.Services.AddSingleton<CharacterRaceService>();
+            builder.Services.AddSingleton<UsersService>();
+            builder.Services.AddSingleton<Mapper>();
             //repository.GetDataAsync();
             // Add services to the container.
 
@@ -42,7 +44,7 @@ namespace ExtCharlist
             ExtCharlistRepository? repository = new ExtCharlistRepository(charRaceService, charService);
 
 
-            repository.WriteAsync();
+            //repository.WriteAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

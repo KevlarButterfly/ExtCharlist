@@ -1,5 +1,5 @@
-﻿using ExtCharlist.Models;
-using ExtCharlist.Services;
+﻿using ExtCharlistLibrary.Models;
+using ExtCharlistAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

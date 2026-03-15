@@ -1,34 +1,34 @@
-﻿using ExtCharlist.Models;
+﻿using ExtCharlistLibrary.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace ExtCharlist.Services
+namespace ExtCharlistAPI.Services
 {
     public class UsersService
     {
-        private readonly IMongoCollection<Character> _characterCollection;
+        private readonly IMongoCollection<User> _userCollection;
         public UsersService(IOptions<ExtCharlistDatabaseSettigs> extCharlistDatabaseSettings)
         {
             var mongoClient = new MongoClient(extCharlistDatabaseSettings.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(extCharlistDatabaseSettings.Value.DatabaseName);
-            _characterCollection = mongoDatabase.GetCollection<Character>(extCharlistDatabaseSettings.Value.UsersCollectionName);
+            _userCollection = mongoDatabase.GetCollection<User>(extCharlistDatabaseSettings.Value.UsersCollectionName);
 
         }
-        public async Task<List<Character>> GetAsync() =>
-        await _characterCollection.Find(_ => true).ToListAsync();
+        public async Task<List<User>> GetAsync() =>
+        await _userCollection.Find(_ => true).ToListAsync();
 
-        public async Task<Character?> GetAsync(string id) =>
-            await _characterCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
-        public async Task<List<Character?>> GetByUserIdAsync(string? userId)
-            => await _characterCollection.Find(x => x.UserId == userId).ToListAsync();
-        public async Task CreateAsync(Character newCharacter) =>
-            await _characterCollection.InsertOneAsync(newCharacter);
+        public async Task<User?> GetAsync(string id) =>
+            await _userCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task<List<User>> GetByUserIdAsync(string? userId)
+            => await _userCollection.Find(x => x.Id == userId).ToListAsync();
+        public async Task CreateAsync(User newUser) =>
+            await _userCollection.InsertOneAsync(newUser);
 
-        public async Task UpdateAsync(string id, Character updatedCharacter) =>
-            await _characterCollection.ReplaceOneAsync(x => x.Id == id, updatedCharacter);
+        public async Task UpdateAsync(string id, User updatedUser) =>
+            await _userCollection.ReplaceOneAsync(x => x.Id == id, updatedUser);
 
         public async Task RemoveAsync(string id) =>
-            await _characterCollection.DeleteOneAsync(x => x.Id == id);
+            await _userCollection.DeleteOneAsync(x => x.Id == id);
     }
 }
-}
+

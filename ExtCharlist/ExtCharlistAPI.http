@@ -1,0 +1,75 @@
+﻿@ExtCharlistAPI_HostAddress = https://localhost:7189
+
+POST {{ExtCharlistAPI_HostAddress}}/api/Users/Get/{userId}
+Content-Type: application/json
+
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/CreateUser
+Content-Type: application/json
+
+{
+
+  "UserEmail" : "abc@example.com",
+  "UserName" : "John Watson",
+  "UserPassword" : "Abc123456",
+  "UserRole" : "baseUser"
+
+
+
+}
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/Users/
+
+Content-Type: application/json
+
+{
+  //User
+}
+
+###
+
+GET {{ExtCharlistAPI_HostAddress}}/GetUsers
+
+###
+
+GET {{ExtCharlistAPI_HostAddress}}/api/character/Get
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/character/Post
+Content-Type: application/json
+
+{
+  "UserId":"abcdefg",
+  "CharacterName":"Himley",
+  "CharacterClass":{
+    "Name":"Fighter",
+    "hit-die" :6
+  },
+  "CharacterRace":{
+    "name":"Dwarf",
+    "speed":25,
+    "alignment":"lawful good"
+  },
+  "speed":25
+}
+
+###
+
+@userId=string
+DELETE {{ExtCharlistAPI_HostAddress}}/api/Character/GetByUser/{{userId}}
+
+###
+
+GET {{ExtCharlistAPI_HostAddress}}/api/Character/GetByUser/abcdefg
+
+###
+
+@id=string
+GET {{ExtCharlistAPI_HostAddress}}/api/Character/Get/69b674b45e02e3161d924b24
+
+###

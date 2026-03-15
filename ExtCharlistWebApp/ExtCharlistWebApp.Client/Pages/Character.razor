@@ -1,0 +1,13 @@
+﻿@using ExtCharlistWebApp
+<PageTitle>huh?</PageTitle>
+<h3>Character</h3>
+
+@code {
+    List<CharacterDTO> characters;
+    [Parameter]
+    public string UserId { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        characters = await CharacterService.GetCharacters();
+    }
+    }
