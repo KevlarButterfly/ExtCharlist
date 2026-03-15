@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <style>
+        header{
+            background: #9c6644;
+            width: 100%;
+            height: 70px;
+            justify-content: space-between;
+            display: flex;
+            flex-direction: row;
+            
+        }
+        .logo{
+            text-align: center;
+            width: 100px;
+            /* justify-content: space-around; */
+            
+        }
+        .menu{
+            text-align: right;
+            width: 500px;
+            float: right;
+            display: flex;
+            flex-direction: row;
+        }
+        .menu-item{
+            /* height: 40px; */
+            width: 100px;
+            margin-right: 20px;
+            /* margin: 20px 20px 20px 20px; */
+            background-color: #7f5539;
+            color: #e6ccb2;
+            padding: 20px 20px 20px 20px;
+            justify-content: space-around;
+            text-align: center;
+            border-radius: 15px;
+        }
+        .menu-item:hover{
+            background-color: #e6ccb2;
+            color: #7f5539;
+            transition: 0.85s;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <header>
+        <div class="logo"><img class="img-logo" src="" alt="logo"></div>
+        <div class="menu">
+            <script>
+                document.getElementsByClassName("menu-item").addEventListener("mouseover")
+                function clicked(){
+                    alert(this)
+                }
+                function menu_item_mouse_over(){
+
+                }
+                
+            </script>
+            <span class="menu-item" onclick="clicked()" onmouseenter="" id="HOME-BUTTON">HOME</span>
+            <span class="menu-item">bb</span>
+            <span class="menu-item">cc</span>
+            <span class="menu-item" onclick="">dd</span>
+        </div>
+    </header>
+</body>
+</html>
