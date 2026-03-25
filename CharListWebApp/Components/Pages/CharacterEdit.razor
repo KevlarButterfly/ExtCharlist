@@ -1,7 +1,37 @@
-﻿@page "/{UserId}/characters//{CharacterId}"
+﻿@page "/{UserId}/characters/{CharacterId}"
+@using ExtCharlistLibrary.DTO
+@using ExtCharlistWebApp.Services
+@inject ICharacterService CharacterService
 <h3>CharacterEdit</h3>
+Name:<input type="text" name="name" @bind="character.CharacterName"/>
+
+
 
 @code {
-   [Parameter]
+    [Parameter]
     public string? UserId { get; set; }
+    [Parameter]
+    public string? CharacterId { get; set; }
+
+    public CharacterDTO character;
+
+    public string CharacterName{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+        character = await CharacterService.GetCharacterById(CharacterId);
+
+        while (true)
+        {
+            PushChanges();
+            Task.Delay(3000000);
+        }
+    }
+
+    public async Task PushChanges()
+    {
+        
+    }
 }

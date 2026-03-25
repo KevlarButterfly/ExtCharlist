@@ -1,14 +1,17 @@
 ﻿@page "/{UserId}/characters/"
 @using ExtCharlistWebApp.Services
 @using ExtCharlistLibrary.DTO
+@using Microsoft.AspNetCore.Http.Extensions
 @inject ICharacterService CharacterService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveAuto
 <PageTitle>huh?</PageTitle>
 @if (characters is null){
     <h1>нема результатов</h1>;
 }
 else{
     @foreach(CharacterDTO character in characters){
-        <div @onclick="e=> await RedirectAsync(">
+        <div @onclick="@(e=>Filler(character.Id))")>
         <h1>Character:@character.CharacterName</h1>
         <ul>
             <li>Race:@character.CharacterRace.RaceName</li>
@@ -27,8 +30,12 @@ else{
         characters = await CharacterService.GetCharactersAsync(UserId);
     }
 
+    protected async void Filler(string id)
+    {
+        RedirectToCharacterAsync(id);
+    }
     protected async Task RedirectToCharacterAsync(string id)
     {
-        return Redire
+        NavigationManager.NavigateTo("/{UserId}/characters/" + id);
     }
     }

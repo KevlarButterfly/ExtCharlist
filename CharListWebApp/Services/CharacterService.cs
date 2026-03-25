@@ -55,5 +55,15 @@ namespace ExtCharlistWebApp.Services
                 return null;
             }
         }
+        
+        public async Task<StatusCodeHttpResult> UpdateCharacter(string id, CharacterDTO character )
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress= new Uri(_settings.HostAddress);
+            //var responseMessage = await client.PutAsync("/api/")
+            return null;
+        }
     }
+
+
 }

@@ -7,6 +7,9 @@ namespace ExtCharlistAPI
     {
         public async Task<CharacterDTO> CharacterToCharacterDTO(Character character)
         {
+            CharacterClassDTO characterClass = new CharacterClassDTO() {
+            
+            };
             CharacterDTO characterDTO = new CharacterDTO()
             {
                 Id = character.Id,
@@ -50,6 +53,26 @@ namespace ExtCharlistAPI
             };
             return user;
         }
-
+        public async Task<CharacterRace> RaceDTOToRace(CharacterRaceDTO race)
+        {
+            CharacterRace characterRace = new CharacterRace()
+            {
+                Id = race.Id,
+                RaceName = race.RaceName,
+                RaceLanguages = race.RaceLanguages,
+                RaceSpeed = race.RaceSpeed
+            };
+            return characterRace;
+        }
+        public async Task<CharacterRaceDTO> RaceToRaceDTO(CharacterRace race)
+        {
+            CharacterRaceDTO characterRace = new CharacterRaceDTO() {
+                Id = race.Id,
+                RaceName = race.RaceName,
+                RaceLanguages = race.RaceLanguages,
+                RaceSpeed = race.RaceSpeed
+            };
+            return characterRace;
+        }
     }
 }

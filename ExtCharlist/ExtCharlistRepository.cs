@@ -40,7 +40,7 @@ namespace ExtCharlistAPI
             List<string> races_json = await GetDataAsync();
             foreach (string race in races_json) {
                 CharacterRace? characterRace = JsonSerializer.Deserialize<CharacterRace>(race);
-                Console.WriteLine(characterRace.RaceLanguages[0].LanguageName);
+                Console.WriteLine(characterRace.RaceLanguages[0]);
                 if (characterRace != null) { 
                     await charRaceService.CreateAsync(characterRace);
                 }

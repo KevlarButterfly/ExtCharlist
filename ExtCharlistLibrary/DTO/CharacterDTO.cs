@@ -10,9 +10,9 @@ namespace ExtCharlistLibrary.DTO
         public string UserID { get; set; }
         public string? CharacterName { get; set; }
         
-        public CharacterClass? CharacterClass { get; set; }
+        public CharacterClassDTO? CharacterClass { get; set; }
 
-        public CharacterRace? CharacterRace { get; set; }
+        public CharacterRaceDTO? CharacterRace { get; set; }
 
 
         public CharacterBackground? CharacterBackground { get; set; }
