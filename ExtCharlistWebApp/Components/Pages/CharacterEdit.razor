@@ -4,6 +4,10 @@
 @inject ICharacterService CharacterService
 <h3>CharacterEdit</h3>
 Name:<input type="text" name="name" @bind="character.CharacterName"/>
+Class:<select>
+    <option value="value">text</option>
+</select>
+
 
 
 
@@ -17,6 +21,9 @@ Name:<input type="text" name="name" @bind="character.CharacterName"/>
 
     public string CharacterName{ get; set; }
 
+    public List<CharacterClassDTO> CharacterClasses{ get; set; }
+    public List<CharacterRaceDTO> CharacterRaces{ get; set; }
+
     protected override async Task OnInitializedAsync()
     {
 
@@ -25,9 +32,14 @@ Name:<input type="text" name="name" @bind="character.CharacterName"/>
 
         while (true)
         {
-            PushChanges();
-            Task.Delay(3000000);
+            await Task.Delay(300000);
+            await PushChanges();
         }
+    }
+
+    public async Task GetRacesAsync()
+    {
+        
     }
 
     public async Task PushChanges()

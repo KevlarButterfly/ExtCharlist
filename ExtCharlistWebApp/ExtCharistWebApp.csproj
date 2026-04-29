@@ -5,11 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+	  <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ExtCharlistLibrary\ExtCharlistLibrary.csproj" />
-    <ProjectReference Include="..\ExtCharlist\ExtCharlistAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{0D41EB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharlistLibrary", "ExtCharlistLibrary\ExtCharlistLibrary.csproj", "{51930FE5-DD1C-4466-A91C-5DE8113A197C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharistWebApp", "CharListWebApp\ExtCharistWebApp.csproj", "{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtCharistWebApp", "ExtCharlistWebApp\ExtCharistWebApp.csproj", "{4F11223C-0525-9D07-C203-7E8E5E4F6A52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,10 @@ Global
 		{51930FE5-DD1C-4466-A91C-5DE8113A197C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51930FE5-DD1C-4466-A91C-5DE8113A197C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51930FE5-DD1C-4466-A91C-5DE8113A197C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14C0E7C5-07CE-47D4-83A6-DE4844AC6B2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F11223C-0525-9D07-C203-7E8E5E4F6A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F11223C-0525-9D07-C203-7E8E5E4F6A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F11223C-0525-9D07-C203-7E8E5E4F6A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F11223C-0525-9D07-C203-7E8E5E4F6A52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,8 +15,8 @@ namespace ExtCharlistAPI
                 Id = character.Id,
                 UserID = character.UserId,
                 CharacterName = character.CharacterName,
-                CharacterRace = character.CharacterRace,
-                CharacterClass = character.CharacterClass,
+                CharacterRace = await RaceToRaceDTO(character.CharacterRace),
+                CharacterClass = await ClassToClassDTO(character.CharacterClass),
                 CharacterAge = character.CharacterAge,
                 CharacterAlignment = character.CharacterAlignment,
                 CharacterBackground = character.CharacterBackground,
@@ -31,8 +31,8 @@ namespace ExtCharlistAPI
             {
                 UserId=characterDTO.UserID,
                 CharacterName = characterDTO.CharacterName,
-                CharacterRace = characterDTO.CharacterRace,
-                CharacterClass = characterDTO.CharacterClass,
+                CharacterRace = await RaceDTOToRace(characterDTO.CharacterRace),
+                CharacterClass = await ClassDTOToClass(characterDTO.CharacterClass),
                 CharacterAge = characterDTO.CharacterAge,
                 CharacterAlignment = characterDTO.CharacterAlignment,
                 CharacterBackground = characterDTO.CharacterBackground,
@@ -47,11 +47,22 @@ namespace ExtCharlistAPI
             {
                 Id = userDTO.Id,
                 userName = userDTO.UserName,
-                userEmail = userDTO.UserEmail,
-                userRole = "baseUser",
-                password = userDTO.UserPassword
+                userEmail = userDTO.Email,
+                userRole = userDTO.UserRole,
+                password = userDTO.Password
             };
             return user;
+        }
+        public async Task<UserDTO> UserToUserDTO(User user)
+        {
+            UserDTO userDTO = new UserDTO
+            {
+                Id = user.Id,
+                UserName = user.userName,
+                Email = user.userEmail,
+                UserRole = user.userRole
+            };
+            return userDTO;
         }
         public async Task<CharacterRace> RaceDTOToRace(CharacterRaceDTO race)
         {
@@ -73,6 +84,26 @@ namespace ExtCharlistAPI
                 RaceSpeed = race.RaceSpeed
             };
             return characterRace;
+        }
+        public async Task<CharacterClass> ClassDTOToClass(CharacterClassDTO characterClassDTO)
+        {
+            CharacterClass characterClass = new CharacterClass()
+            {
+                Id = characterClassDTO.Id,
+                ClassName = characterClassDTO.ClassName,
+                ClassHitDice = characterClassDTO.ClassHitDice
+            };
+            return characterClass;
+        }
+        public async Task<CharacterClassDTO> ClassToClassDTO(CharacterClass characterClass)
+        {
+            CharacterClassDTO characterClassDTO = new CharacterClassDTO()
+            {
+                Id = characterClass.Id,
+                ClassName = characterClass.ClassName,
+                ClassHitDice = characterClass.ClassHitDice
+            };
+            return characterClassDTO;
         }
     }
 }

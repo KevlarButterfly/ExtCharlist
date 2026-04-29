@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using System.Text.Json.Serialization;
+using ExtCharlistLibrary.DTO;
 namespace ExtCharlistLibrary.Models
 {
     public class User
@@ -23,6 +24,9 @@ namespace ExtCharlistLibrary.Models
 
         [BsonElement("UserRole")]
         [JsonPropertyName("UserRole")]
-        public string? userRole { get; set; }
+        public UserRole? userRole { get; set; }
+        [BsonElement("PasswordSalt")]
+        [JsonPropertyName("PasswordSalt")]
+        public byte[]? salt { get; set; }
     }
 }

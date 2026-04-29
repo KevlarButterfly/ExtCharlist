@@ -3,6 +3,10 @@ using ExtCharlistLibrary.DTO;
 using ExtCharlistLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using ZstdSharp.Unsafe;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ExtCharlistAPI.Controllers
 {
@@ -12,9 +16,12 @@ namespace ExtCharlistAPI.Controllers
     {
         private readonly UsersService _usersService;
         private readonly Mapper _mapper;
-        public UsersController(UsersService usersService, Mapper mapper){
+        private readonly PasswordHashService _passwordHashService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UsersController(UsersService usersService, Mapper mapper, PasswordHashService passwordHashService){
             _usersService = usersService;
             _mapper = mapper;
+            _passwordHashService = passwordHashService;
         }
 
         [HttpGet("/GetUsers")]
@@ -60,6 +67,36 @@ namespace ExtCharlistAPI.Controllers
             await _usersService.RemoveAsync(id);
 
             return NoContent();
+        }
+        [HttpGet("VerifyUser")]
+        public async Task<UserDTO?> VerifyUser(UserDTO user)
+        {
+            if(await _usersService.GetWithEmailAsync(user.Email) == null)
+            {
+                return null;
+            }
+            var userFromDb = await _usersService.GetWithEmailAsync(user.Email);
+            var claims  = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userFromDb.userName),
+                new Claim(ClaimTypes.NameIdentifier, userFromDb.Id),
+                new Claim(ClaimTypes.Role, userFromDb.userRole.ToString())
+            };
+            var identity = new ClaimsIdentity(claims, "Cookies");
+            var principal = new ClaimsPrincipal(identity);
+            await _httpContextAccessor.HttpContext.SignInAsync("Cookies", principal);
+            return await _passwordHashService.VerifyPasswordAsync(user.Password, userFromDb.password, userFromDb.salt) ? await _mapper.UserToUserDTO(userFromDb) : null;
+        }
+        
+        public async Task<UserDTO?> VerifyRegisterAsync(UserDTO userDTO)
+        {
+            if (await _usersService.GetWithEmailAsync(userDTO.Email) != null)
+            {
+                return null;
+            }
+            User user = await _mapper.UserDTOToUser(userDTO);
+            _usersService.CreateAsync(user);
+            return userDTO;
         }
     }
 }

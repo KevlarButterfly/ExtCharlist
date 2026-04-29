@@ -1,5 +1,6 @@
-using ExtCharlistLibrary.Models;
 using ExtCharlistAPI.Services;
+using ExtCharlistLibrary.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -21,12 +22,13 @@ namespace ExtCharlistAPI
             //settings = config.Bind();
 
             
-
+            
             builder.Services.Configure<ExtCharlistDatabaseSettigs>(builder.Configuration.GetSection("ExtDnDCharlistStore"));
 
             builder.Services.AddSingleton<CharactersService>();
             builder.Services.AddSingleton<CharacterRaceService>();
             builder.Services.AddSingleton<UsersService>();
+            builder.Services.AddSingleton<PasswordHashService>();
             builder.Services.AddSingleton<Mapper>();
             //repository.GetDataAsync();
             // Add services to the container.
@@ -41,6 +43,8 @@ namespace ExtCharlistAPI
             var charService = sp.GetService<CharactersService>();
 
             var app = builder.Build();
+
+            app.Map("/admin", [Authorize(Roles = "admin")] () => "Admin Panel");
             ExtCharlistRepository? repository = new ExtCharlistRepository(charRaceService, charService);
 
 

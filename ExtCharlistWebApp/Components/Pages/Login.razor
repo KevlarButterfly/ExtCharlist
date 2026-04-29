@@ -1,0 +1,66 @@
+﻿@page "/login"
+@using ExtCharistWebApp.Services
+@using ExtCharlistLibrary.DTO
+@inject ILoginService LoginService
+@inject NavigationManager NavManager
+
+<h3>Login</h3>
+@* <form method='post'>
+    <p>
+        <label>Email</label><br />
+        <input name='email' />
+    </p>
+    <p>
+        <label>Password</label><br />
+        <input type='password' name='password' />
+    </p>
+    <input type='submit' value='Login' onclick="() => OnSubmitAsync(@h)"/>
+</form> *@
+
+<EditForm Model = "@UserDTO" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <InputText id="email"
+               @bind-Value="UserDTO.Email"/>
+    <InputText id="password" @bind-Value="UserDTO.Password" type="password" />
+    <button type="submit">Login</button>
+</EditForm>
+@code {
+
+    private ValidationMessageStore messageStore;
+    private UserDTO UserDTO = new UserDTO();
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+
+    }
+    private async Task HandleValidSubmit(EditContext context)
+    {
+        bool success = await LoginService.OnLogin(UserDTO);
+        if (!success)
+        {
+            messageStore = new ValidationMessageStore(context);
+            messageStore.Clear();
+            messageStore.Add(() => UserDTO.Email, "Invalid email or password.");
+            context.NotifyValidationStateChanged();
+            return;
+        }
+    }
+    private async Task HandleInvalidSubmit()
+    {
+        messageStore.Clear();
+    }
+    async void OnSubmit(EditContext context)
+    {
+        bool k = context.Validate();
+        if (!k) return;
+        messageStore = new ValidationMessageStore(context);
+        messageStore.Clear();
+        navigationManager.NavigateTo($"/{UserDTO.Id}");
+    }
+
+}

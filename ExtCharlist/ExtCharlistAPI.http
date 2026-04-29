@@ -73,3 +73,7 @@ GET {{ExtCharlistAPI_HostAddress}}/api/Character/GetByUser/abcdefg
 GET {{ExtCharlistAPI_HostAddress}}/api/Character/Get/69b674b45e02e3161d924b24
 
 ###
+
+GET {{ExtCharlistAPI_HostAddress}}/DoesUserExists
+
+###

@@ -19,6 +19,8 @@ namespace ExtCharlistAPI.Services
 
         public async Task<User?> GetAsync(string id) =>
             await _userCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task<User?> GetWithEmailAsync(string email) =>
+            await _userCollection.Find(x => x.userEmail == email).FirstOrDefaultAsync();
         public async Task<List<User>> GetByUserIdAsync(string? userId)
             => await _userCollection.Find(x => x.Id == userId).ToListAsync();
         public async Task CreateAsync(User newUser) =>

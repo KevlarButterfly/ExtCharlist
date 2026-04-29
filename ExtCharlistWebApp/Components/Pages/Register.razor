@@ -1,0 +1,68 @@
+﻿@page "/register"
+@using ExtCharistWebApp.Services
+@using ExtCharlistLibrary.DTO
+@inject IRegisterService RegisterService
+@inject NavigationManager NavManager
+
+<h3>Login</h3>
+@* <form method='post'>
+    <p>
+        <label>Email</label><br />
+        <input name='email' />
+    </p>
+    <p>
+        <label>Password</label><br />
+        <input type='password' name='password' />
+    </p>
+    <input type='submit' value='Login' onclick="() => OnSubmitAsync(@h)"/>
+</form> *@
+
+<EditForm Model="@userDTO" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <InputText id="email"
+               @bind-Value="userDTO.Email" />
+    <InputText id="password" @bind-Value="userDTO.Password" type="password" />
+    <InputText id="password-repeat" @bind-Value="DoubledPassword" type="password"/>
+    <button type="submit">Login</button>
+</EditForm>
+@code {
+
+    private ValidationMessageStore messageStore;
+    private UserDTO userDTO = new UserDTO();
+    private string DoubledPassword;
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    protected override void OnInitialized()
+    {
+        
+
+    }
+    private async Task HandleValidSubmit(EditContext context)
+    {
+        bool success = await RegisterService.OnRegisterAsync(userDTO);
+        if (!success)
+        {
+            messageStore = new ValidationMessageStore(context);
+            messageStore.Clear();
+            messageStore.Add(() => userDTO.Email, "Invalid email or password.");
+            context.NotifyValidationStateChanged();
+            return;
+        }
+    }
+    private async Task HandleInvalidSubmit()
+    {
+        messageStore.Clear();
+    }
+    async void OnSubmit(EditContext context)
+    {
+        bool k = context.Validate();
+        if (!k) return;
+        messageStore = new ValidationMessageStore(context);
+        messageStore.Clear();
+        navigationManager.NavigateTo($"/{userDTO.Id}");
+    }
+
+}
