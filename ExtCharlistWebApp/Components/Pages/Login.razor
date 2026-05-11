@@ -3,6 +3,7 @@
 @using ExtCharlistLibrary.DTO
 @inject ILoginService LoginService
 @inject NavigationManager NavManager
+@inject IHttpContextAccessor httpContextAccessor
 
 <h3>Login</h3>
 @* <form method='post'>
@@ -17,6 +18,7 @@
     <input type='submit' value='Login' onclick="() => OnSubmitAsync(@h)"/>
 </form> *@
 
+
 <EditForm Model = "@UserDTO" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -24,7 +26,12 @@
     <InputText id="email"
                @bind-Value="UserDTO.Email"/>
     <InputText id="password" @bind-Value="UserDTO.Password" type="password" />
-    <button type="submit">Login</button>
+    <button type="submit">Login</button>    
+   @if(ShowRegisterLink)
+   {
+        <p>Don't have an account? <a @onclick='() => navigationManager.NavigateTo("/register")'>Register here</a></p>
+    }
+    )
 </EditForm>
 @code {
 
@@ -32,27 +39,35 @@
     private UserDTO UserDTO = new UserDTO();
     [Inject]
     private NavigationManager navigationManager { get; set; }
+    private bool ShowRegisterLink = false;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-
+        UserDTO signedInUser = await LoginService.HasUserSignedIn();
+        if (signedInUser != null)
+        {
+            navigationManager.NavigateTo($"/{signedInUser.Id}");
+        }
 
     }
     private async Task HandleValidSubmit(EditContext context)
     {
-        bool success = await LoginService.OnLogin(UserDTO);
+        bool success = await LoginService.OnLoginAsync(UserDTO);
+        messageStore = new ValidationMessageStore(context);
         if (!success)
         {
-            messageStore = new ValidationMessageStore(context);
+
             messageStore.Clear();
             messageStore.Add(() => UserDTO.Email, "Invalid email or password.");
             context.NotifyValidationStateChanged();
+            ShowRegisterLink = true;
             return;
         }
+        messageStore.Clear();
+        navigationManager.NavigateTo($"/{await LoginService.GetLoggedIdAsync()}");
     }
     private async Task HandleInvalidSubmit()
     {
-        messageStore.Clear();
     }
     async void OnSubmit(EditContext context)
     {
@@ -60,7 +75,8 @@
         if (!k) return;
         messageStore = new ValidationMessageStore(context);
         messageStore.Clear();
-        navigationManager.NavigateTo($"/{UserDTO.Id}");
+        Console.WriteLine($"Redirecting to page /{await LoginService.GetLoggedIdAsync()}");
+        navigationManager.NavigateTo($"/{await LoginService.GetLoggedIdAsync()}");
     }
 
 }

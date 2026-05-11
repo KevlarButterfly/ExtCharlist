@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ExtCharlistAPI.Controllers
 {
@@ -18,10 +19,11 @@ namespace ExtCharlistAPI.Controllers
         private readonly Mapper _mapper;
         private readonly PasswordHashService _passwordHashService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UsersController(UsersService usersService, Mapper mapper, PasswordHashService passwordHashService){
+        public UsersController(UsersService usersService, Mapper mapper, PasswordHashService passwordHashService, IHttpContextAccessor httpContextAccessor){
             _usersService = usersService;
             _mapper = mapper;
             _passwordHashService = passwordHashService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("/GetUsers")]
@@ -69,13 +71,14 @@ namespace ExtCharlistAPI.Controllers
             return NoContent();
         }
         [HttpGet("VerifyUser")]
-        public async Task<UserDTO?> VerifyUser(UserDTO user)
+        public async Task<UserDTO?> VerifyUser(string email, string password)
         {
-            if(await _usersService.GetWithEmailAsync(user.Email) == null)
+            if(await _usersService.GetWithEmailAsync(email) == null)
             {
                 return null;
             }
-            var userFromDb = await _usersService.GetWithEmailAsync(user.Email);
+            var userFromDb = await _usersService.GetWithEmailAsync(email);
+            Console.WriteLine($"User with email:{userFromDb.userEmail}, password:{userFromDb.password}, id:{userFromDb.Id} is trying to login");
             var claims  = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, userFromDb.userName),
@@ -85,17 +88,34 @@ namespace ExtCharlistAPI.Controllers
             var identity = new ClaimsIdentity(claims, "Cookies");
             var principal = new ClaimsPrincipal(identity);
             await _httpContextAccessor.HttpContext.SignInAsync("Cookies", principal);
-            return await _passwordHashService.VerifyPasswordAsync(user.Password, userFromDb.password, userFromDb.salt) ? await _mapper.UserToUserDTO(userFromDb) : null;
+            return await _passwordHashService.VerifyPasswordAsync(password, userFromDb.password, userFromDb.salt) ? await _mapper.UserToUserDTO(userFromDb) : null;
         }
-        
-        public async Task<UserDTO?> VerifyRegisterAsync(UserDTO userDTO)
+        [HttpPost("VerifyRegister")]
+        public async Task<UserDTO?> VerifyRegisterAsync([FromBody] UserDTO userDTO)
         {
             if (await _usersService.GetWithEmailAsync(userDTO.Email) != null)
             {
                 return null;
-            }
+            }            
             User user = await _mapper.UserDTOToUser(userDTO);
-            _usersService.CreateAsync(user);
+            var res = await _passwordHashService.HashPasswordAsync(userDTO.Password);
+            user.password = res.Item1;
+            user.salt = res.Item2;
+            user.userRole = new UserRole("user");
+            
+            await _usersService.CreateAsync(user);
+            User newUser = await _usersService.GetWithEmailAsync(user.userEmail);
+            user.Id = newUser.Id;
+            Console.WriteLine($"Created user with email:{user.userEmail}, password:{userDTO.Password}, id:{user.Id}");
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.userName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Role, user.userRole.ToString())
+            };
+            var identity = new ClaimsIdentity(claims, "Cookies");
+            var principal = new ClaimsPrincipal(identity);
+            await _httpContextAccessor.HttpContext.SignInAsync("Cookies", principal);
             return userDTO;
         }
     }

@@ -77,3 +77,52 @@ GET {{ExtCharlistAPI_HostAddress}}/api/Character/Get/69b674b45e02e3161d924b24
 GET {{ExtCharlistAPI_HostAddress}}/DoesUserExists
 
 ###
+
+@email=string
+@password=string
+GET {{ExtCharlistAPI_HostAddress}}/api/users/VerifyUser/VerifyUser?email={{email}}&password={{password}}
+
+###
+
+DELETE {{ExtCharlistAPI_HostAddress}}/api/Users/VerifyRegister
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/Users/VerifyRegister
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/users/VerifyRegisterAsync/VerifyRegister?email={{email}}&password={{password}}
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/users/VerifyRegisterAsync/VerifyRegister?email={{email}}&password={{password}}
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/Users/VerifyRegister
+Content-Type: application/json
+
+{
+  //UserDTO
+}
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/users/VerifyRegisterAsync/VerifyRegister
+Content-Type: application/json
+
+{
+  //UserDTO
+}
+
+###
+
+POST {{ExtCharlistAPI_HostAddress}}/api/Users/VerifyRegister/VerifyRegister
+Content-Type: application/json
+
+{
+  //UserDTO
+}
+
+###

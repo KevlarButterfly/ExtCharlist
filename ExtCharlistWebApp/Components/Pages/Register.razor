@@ -1,10 +1,10 @@
 ﻿@page "/register"
 @using ExtCharistWebApp.Services
 @using ExtCharlistLibrary.DTO
-@inject IRegisterService RegisterService
+@inject ILoginService LoginService
 @inject NavigationManager NavManager
 
-<h3>Login</h3>
+<h3>Register</h3>
 @* <form method='post'>
     <p>
         <label>Email</label><br />
@@ -20,35 +20,64 @@
 <EditForm Model="@userDTO" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
+    <span>Username</span>
+    <InputText id="username" @bind-Value="userDTO.UserName" /> <br />
     
+    <span>Email</span>
     <InputText id="email"
-               @bind-Value="userDTO.Email" />
-    <InputText id="password" @bind-Value="userDTO.Password" type="password" />
-    <InputText id="password-repeat" @bind-Value="DoubledPassword" type="password"/>
-    <button type="submit">Login</button>
+               @bind-Value="userDTO.Email" /><br />
+    <span>Password</span>
+    <InputText id="password" @bind-Value="userDTO.Password" type="password" /><br />
+    <span>Repeat password</span>
+    <InputText id="password-repeat" @bind-Value="DoubledPassword" type="password"/> <br />
+    
+    <button type="submit">Register</button><br />
+    @if(ShowLoginLink)
+    {
+        <p>Already have an account? <a @onclick='() => navigationManager.NavigateTo("/login")'>Login here</a></p>
+    }
+    
+    
 </EditForm>
+
 @code {
 
+    private bool ShowLoginLink = false;
     private ValidationMessageStore messageStore;
     private UserDTO userDTO = new UserDTO();
     private string DoubledPassword;
+
     [Inject]
     private NavigationManager navigationManager { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        
-
+        UserDTO signedInUser = await LoginService.HasUserSignedIn();
+        if (signedInUser != null)
+        {
+            navigationManager.NavigateTo($"/{signedInUser.Id}");
+        }
     }
     private async Task HandleValidSubmit(EditContext context)
     {
-        bool success = await RegisterService.OnRegisterAsync(userDTO);
+        if(userDTO.Password != DoubledPassword)
+        {
+            messageStore = new ValidationMessageStore(context);
+            messageStore.Clear();
+            messageStore.Add(() => userDTO.Password, "Passwords do not match.");
+            context.NotifyValidationStateChanged();
+            return;
+        }
+        userDTO.UserRole = new("user");
+        
+        bool success = await LoginService.OnRegisterAsync(userDTO);
         if (!success)
         {
             messageStore = new ValidationMessageStore(context);
             messageStore.Clear();
-            messageStore.Add(() => userDTO.Email, "Invalid email or password.");
+            messageStore.Add(() => userDTO.Email, "User with this email already exists.");
             context.NotifyValidationStateChanged();
+            ShowLoginLink = true;
             return;
         }
     }

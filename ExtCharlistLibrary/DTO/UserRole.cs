@@ -12,6 +12,7 @@ namespace ExtCharlistLibrary.DTO
         {
             this.v = v;
         }
+        public UserRole() { }
 
         public string? Name { get; set; }
     }

@@ -1,5 +1,6 @@
 using ExtCharlistAPI.Services;
 using ExtCharlistLibrary.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -30,6 +31,16 @@ namespace ExtCharlistAPI
             builder.Services.AddSingleton<UsersService>();
             builder.Services.AddSingleton<PasswordHashService>();
             builder.Services.AddSingleton<Mapper>();
+            builder.Services.AddHttpContextAccessor();
+
+
+            builder.Services.AddAuthorization();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = "/login";
+                options.AccessDeniedPath = "/access-denied";
+
+            });
             //repository.GetDataAsync();
             // Add services to the container.
 

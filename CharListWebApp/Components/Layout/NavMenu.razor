@@ -1,0 +1,61 @@
+﻿@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">ExtCharListWebApp</a>
+    </div>
+</div>
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href=""></NavLink>
+        </div>
+    </nav>
+</div>
+ *@
+
+ <style>
+    .menu-nav {
+        background: royalblue;
+        
+    }
+    .buttons{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 90%;
+    }
+    .nav-item{
+        border: groove;
+        border-color: black;
+    }
+ </style>
+ <nav class="menu-nav">
+    <div class="buttons">
+        <div class="nav-item">
+            HOME
+        </div>
+        <div class="nav-item">
+            ABOUT
+        </div>
+        <div class="account">
+            <img src="" alt="ACCOUNT-LOGO">
+        </div>
+    </div>
+ </nav>
+ @code{
+    public string UserId;
+    public override async Task OnInitializedAsync(){
+        
+    }
+ }

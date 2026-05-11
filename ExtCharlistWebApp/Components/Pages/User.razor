@@ -1,0 +1,33 @@
+﻿@page "/{userId}"
+@using ExtCharistWebApp.Services
+@using ExtCharlistLibrary.DTO
+@inject ILoginService LoginService
+<h3>User</h3>
+<p>Welcome, @UserDTO?.UserName!</p>
+<br />
+
+
+
+
+
+<button @onclick="Logout">Logout</button>
+@code {
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    private UserDTO UserDTO;
+    [Parameter]
+    public string? UserId { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        UserDTO signedInUser = await LoginService.HasUserSignedIn();
+        if (signedInUser == null)
+        {
+            navigationManager.NavigateTo($"/login");
+        }
+    }
+
+    private async Task Logout() { 
+        await LoginService.OnLogoutAsync(); 
+        navigationManager.NavigateTo("/");
+    }
+}

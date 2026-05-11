@@ -21,7 +21,9 @@ namespace ExtCharistWebApp
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddMvc();
+            builder.Services.AddControllers();
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
@@ -30,10 +32,10 @@ namespace ExtCharistWebApp
 
             });
             builder.Services.AddCascadingAuthenticationState();
-            builder.Services.AddSingleton<ILoginService, LoginService>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddSingleton<ICharacterService, CharacterService>();
 
-            builder.WebHost.UseUrls("http://localhost:7800");
+            //builder.WebHost.UseUrls("http://localhost:7800");
 
             var app = builder.Build();
             app.UseAuthentication();
