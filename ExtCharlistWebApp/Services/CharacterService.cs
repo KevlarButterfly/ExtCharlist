@@ -1,32 +1,42 @@
 ﻿using ExtCharistWebApp;
+using ExtCharistWebApp.Services;
 using ExtCharlistLibrary.DTO;
 using ExtCharlistLibrary.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace ExtCharlistWebApp.Services
 {
     public class CharacterService : ICharacterService
     {
-        private APISettings _settings;
+        private ConnectionSettings _settings;
+        private HttpClient _httpClient;
+        private ICookieService _cookieService;
         private IEnumerable<CharacterDTO> charactersCached { get; set; }
-        public CharacterService(IOptions<APISettings> options)
+        public CharacterService(IOptions<ConnectionSettings> options, ICookieService cookieService)
         {
             _settings = options.Value;
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri(_settings.APIHostAddress);
+            _cookieService = cookieService;
         }
         public async Task<IEnumerable<CharacterDTO>> GetCharactersAsync(string userId)
         {
-            if (charactersCached is null)
-            {
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(_settings.HostAddress);
-                var responseMessage = await client.GetAsync("/api/character/GetByUser/" + userId);
 
-                var characters = await responseMessage.Content.ReadFromJsonAsync<IEnumerable<CharacterDTO>>();
-                charactersCached = characters;
-                return characters;
+                var responseMessage = await _httpClient.GetAsync("/api/character/GetByUser/" + userId);
+                if (!responseMessage.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"Characters request error:{responseMessage.StatusCode}");
+                return null;    
             }
-            return charactersCached;
+                else
+                {
+                    var characters = await responseMessage.Content.ReadFromJsonAsync<IEnumerable<CharacterDTO>>();
+                    charactersCached = characters;
+                    return characters;
+                }
+            
         }
 
         public async Task<CharacterDTO> GetCharacterById(string id)
@@ -34,9 +44,7 @@ namespace ExtCharlistWebApp.Services
 
             if (charactersCached is null)
             {
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(_settings.HostAddress);
-                var responseMessage = await client.GetAsync("/api/Character/Get/" + id);
+                var responseMessage = await _httpClient.GetAsync("/api/Character/Get/" + id);
 
                 var character = await responseMessage.Content.ReadFromJsonAsync<CharacterDTO>();
                 return character;
@@ -56,12 +64,35 @@ namespace ExtCharlistWebApp.Services
             }
         }
         
-        public async Task<StatusCodeHttpResult> UpdateCharacter(string id, CharacterDTO character )
+        public async Task<bool> UpdateCharacterAsync(CharacterDTO character )
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress= new Uri(_settings.HostAddress);
-            //var responseMessage = await client.PutAsync("/api/")
-            return null;
+
+            var response = await _httpClient.PutAsJsonAsync($"/api/Character/Update/UpdateCharacter", character);
+
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<CharacterDTO> CreateCharacterAsync() {
+            UserDTO user = await _cookieService.GetSignedInUserAsync();
+            var response = await _httpClient.PostAsync($"/api/Character/CreateNew/{user.Id}", null);
+            CharacterDTO character = new();
+            character.Id = await response.Content.ReadAsStringAsync();
+             return character;
+        }
+        public async Task<bool> DeleteCharacterAsync(string id)
+        {
+            var response = await _httpClient.DeleteAsync($"/api/Character/Delete/{id}");
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<List<CharacterRaceDTO>> GetRacesAsync()
+        {
+            var response = await _httpClient.GetFromJsonAsync<List<CharacterRaceDTO>>($"/api/characterrace/GetAllRaces");
+            return response;
+            }
+        public async Task<List<CharacterClassDTO>> GetClassesAsync()
+        {
+            var response = await _httpClient.GetFromJsonAsync<List<CharacterClassDTO>>($"/api/characterclass/GetAllClasses");
+            return response;
+
         }
     }
 

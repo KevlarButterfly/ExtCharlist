@@ -1,4 +1,8 @@
-﻿@* <div class="top-row ps-3 navbar navbar-dark">
+﻿@using ExtCharistWebApp.Services
+@using ExtCharlistLibrary.DTO
+@inject ILoginService LoginService
+@inject NavigationManager NavigationManager
+@* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">ExtCharListWebApp</a>
     </div>
@@ -26,7 +30,10 @@
 
  <style>
     .menu-nav {
-        background: royalblue;
+        background: #6082B6;
+        display:flex;
+        flex-direction:row;
+        height:60px;
         
     }
     .buttons{
@@ -38,6 +45,7 @@
     .nav-item{
         border: groove;
         border-color: black;
+        padding-top:10px;
     }
  </style>
  <nav class="menu-nav">
@@ -50,10 +58,32 @@
         </div>
         
     </div>
+    @if(signedInUser.Id!=null){
     <div class="account">
-        <img src="" alt="ACCOUNT-LOGO">
+        <img src="" alt="ACCOUNT-LOGO">@signedInUser.UserName
     </div>
- </nav>
- @code{
+    }
+    @if (signedInUser.Id == null)
+    {
+        <div @onclick="RedirectToLogin">Sign In</div>
+        <div @onclick="RedirectToRegister">Sign Up</div>
+    }
+</nav>
+@code{
     public string UserId;
+    UserDTO signedInUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        signedInUser = await LoginService.GetSignedInUserAsync();
+
+    }
+    public void RedirectToLogin()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+    public void RedirectToRegister()
+    {
+        NavigationManager.NavigateTo("/register");
+    }
  }

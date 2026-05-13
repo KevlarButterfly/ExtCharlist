@@ -2,6 +2,8 @@
 using ExtCharlistAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ExtCharlistAPI;
+using ExtCharlistLibrary.DTO;
 
 namespace ExtCharlist.Controllers
 {
@@ -10,12 +12,24 @@ namespace ExtCharlist.Controllers
     public class CharacterRaceController : ControllerBase
     {
         private readonly CharacterRaceService _characterRaceService;
+        private readonly Mapper _mapper;
 
-        public CharacterRaceController(CharacterRaceService characterRaceService)=>_characterRaceService = characterRaceService;
+        public CharacterRaceController(CharacterRaceService characterRaceService, Mapper mapper) { 
+            _characterRaceService = characterRaceService;
+            _mapper = mapper;
+        }
         // GET: CharacterRaceController
-        [HttpGet]
-        public async Task<List<CharacterRace>> Get() =>
-            await _characterRaceService.GetAsync();
+        [HttpGet("GetAllRaces")]
+        public async Task<List<CharacterRaceDTO>> Get()
+        {
+            var res = await _characterRaceService.GetAsync();
+            List<CharacterRaceDTO> races = new List<CharacterRaceDTO>();
+            for(int i = 0; i < res.Count; i++){
+                races.Add(await _mapper.RaceToRaceDTO(res[i]));
+            }
+            return races;
+        }
+            
 
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<CharacterRace>> Get(string id)

@@ -10,6 +10,7 @@ namespace ExtCharlistLibrary.DTO
         public string UserID { get; set; }
         public string? CharacterName { get; set; }
         
+        public int? level { get; set; }
         public CharacterClassDTO? CharacterClass { get; set; }
 
         public CharacterRaceDTO? CharacterRace { get; set; }
@@ -23,5 +24,14 @@ namespace ExtCharlistLibrary.DTO
 
         public string? CharacterAlignment { get; set; }
         public int? CharacterAge { get; set; }
+
+
+        public int? Strength { get; set; } = 10;
+        public int? Dexterity { get; set; } = 10;
+        public int? Constitution{get;set;} = 10;
+        public int? Wisdom{get;set;} = 10;
+        public int? Intelligence{get;set;} = 10;
+        public int? Charisma{get;set;} = 10;
+
     }
 }

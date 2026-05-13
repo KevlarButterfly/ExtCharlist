@@ -7,7 +7,7 @@ namespace ExtCharistWebApp.Services
     {
         public Task<bool> OnLoginAsync(UserDTO userDTO);
         public Task<bool> OnRegisterAsync(UserDTO userDTO);
-        public Task<UserDTO>? HasUserSignedIn();
+        public Task<UserDTO>? GetSignedInUserAsync();
         public Task OnLogoutAsync();
         public Task<String> GetLoggedIdAsync();
     }

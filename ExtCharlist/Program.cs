@@ -14,7 +14,6 @@ namespace ExtCharlistAPI
 
         public static void Main(string[] args)
         {
-            //ExtCharlistRepository? repository = new ExtCharlistRepository();
 
             var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +27,7 @@ namespace ExtCharlistAPI
 
             builder.Services.AddSingleton<CharactersService>();
             builder.Services.AddSingleton<CharacterRaceService>();
+            builder.Services.AddSingleton<CharacterClassService>();
             builder.Services.AddSingleton<UsersService>();
             builder.Services.AddSingleton<PasswordHashService>();
             builder.Services.AddSingleton<Mapper>();
@@ -52,14 +52,16 @@ namespace ExtCharlistAPI
             var charRaceService = sp.GetService<CharacterRaceService>();
 
             var charService = sp.GetService<CharactersService>();
+            var charClassService = sp.GetService<CharacterClassService>();
 
             var app = builder.Build();
 
             app.Map("/admin", [Authorize(Roles = "admin")] () => "Admin Panel");
-            ExtCharlistRepository? repository = new ExtCharlistRepository(charRaceService, charService);
+            ExtCharlistRepository? repository = new ExtCharlistRepository(charRaceService, charClassService,charService);
 
 
-            //repository.WriteAsync();
+            //repository.WriteRacesAsync();
+            //repository.WriteClassesAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

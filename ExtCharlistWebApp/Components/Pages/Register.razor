@@ -52,7 +52,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        UserDTO signedInUser = await LoginService.HasUserSignedIn();
+        UserDTO signedInUser = await LoginService.GetSignedInUserAsync();
         if (signedInUser != null)
         {
             navigationManager.NavigateTo($"/{signedInUser.Id}");

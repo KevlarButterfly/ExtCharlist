@@ -116,6 +116,11 @@ namespace ExtCharlistAPI.Controllers
             var identity = new ClaimsIdentity(claims, "Cookies");
             var principal = new ClaimsPrincipal(identity);
             await _httpContextAccessor.HttpContext.SignInAsync("Cookies", principal);
+            //_httpContextAccessor.HttpContext.Response.Cookies.Append("username", userDTO.UserName);
+            //_httpContextAccessor.HttpContext.Response.Cookies.Append("email", userDTO.Email);
+            //_httpContextAccessor.HttpContext.Response.Cookies.Append("id", userDTO.Id);
+            //_httpContextAccessor.HttpContext.Response.Cookies.Append("role", userDTO.UserRole.Name);
+
             return userDTO;
         }
     }

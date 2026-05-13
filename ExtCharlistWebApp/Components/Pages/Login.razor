@@ -31,7 +31,7 @@
    {
         <p>Don't have an account? <a @onclick='() => navigationManager.NavigateTo("/register")'>Register here</a></p>
     }
-    )
+    
 </EditForm>
 @code {
 
@@ -43,8 +43,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        UserDTO signedInUser = await LoginService.HasUserSignedIn();
-        if (signedInUser != null)
+        UserDTO signedInUser = await LoginService.GetSignedInUserAsync();
+        if (signedInUser.Id != null)
         {
             navigationManager.NavigateTo($"/{signedInUser.Id}");
         }

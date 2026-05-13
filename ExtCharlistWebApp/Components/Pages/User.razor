@@ -3,7 +3,8 @@
 @using ExtCharlistLibrary.DTO
 @inject ILoginService LoginService
 <h3>User</h3>
-<p>Welcome, @UserDTO?.UserName!</p>
+<p>Welcome, @userDTO.UserName!</p>
+<p>Your role: @userDTO.UserRole</p>
 <br />
 
 
@@ -14,13 +15,13 @@
 @code {
     [Inject]
     private NavigationManager navigationManager { get; set; }
-    private UserDTO UserDTO;
+    private UserDTO userDTO;
     [Parameter]
     public string? UserId { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        UserDTO signedInUser = await LoginService.HasUserSignedIn();
-        if (signedInUser == null)
+        userDTO = await LoginService.GetSignedInUserAsync();
+        if (userDTO.Id!=UserId)
         {
             navigationManager.NavigateTo($"/login");
         }

@@ -15,6 +15,7 @@ namespace ExtCharlistAPI
                 Id = character.Id,
                 UserID = character.UserId,
                 CharacterName = character.CharacterName,
+                level = character.level,
                 CharacterRace = await RaceToRaceDTO(character.CharacterRace),
                 CharacterClass = await ClassToClassDTO(character.CharacterClass),
                 CharacterAge = character.CharacterAge,
@@ -29,15 +30,23 @@ namespace ExtCharlistAPI
         {
             Character character = new Character()
             {
+                Id = characterDTO.Id,
                 UserId=characterDTO.UserID,
                 CharacterName = characterDTO.CharacterName,
+                level = characterDTO.level,
                 CharacterRace = await RaceDTOToRace(characterDTO.CharacterRace),
                 CharacterClass = await ClassDTOToClass(characterDTO.CharacterClass),
                 CharacterAge = characterDTO.CharacterAge,
                 CharacterAlignment = characterDTO.CharacterAlignment,
                 CharacterBackground = characterDTO.CharacterBackground,
                 CharacterSpeed = characterDTO.CharacterSpeed,
-                CharacterTraits = characterDTO.CharacterTraits
+                CharacterTraits = characterDTO.CharacterTraits,
+                Strength = characterDTO.Strength,
+                Dexterity = characterDTO.Dexterity,
+                Constitution = characterDTO.Constitution,
+                Wisdom = characterDTO.Wisdom,
+                Intelligence = characterDTO.Intelligence,
+                Charisma = characterDTO.Charisma
             };
             return character;
         }
@@ -66,27 +75,39 @@ namespace ExtCharlistAPI
         }
         public async Task<CharacterRace> RaceDTOToRace(CharacterRaceDTO race)
         {
+            if(race== null)
+            {
+                return null;
+            }
             CharacterRace characterRace = new CharacterRace()
             {
                 Id = race.Id,
                 RaceName = race.RaceName,
-                RaceLanguages = race.RaceLanguages,
+                //RaceLanguages = race.RaceLanguages,
                 RaceSpeed = race.RaceSpeed
             };
             return characterRace;
         }
         public async Task<CharacterRaceDTO> RaceToRaceDTO(CharacterRace race)
         {
+            if(race == null)
+            {
+                return null;
+            }
             CharacterRaceDTO characterRace = new CharacterRaceDTO() {
                 Id = race.Id,
                 RaceName = race.RaceName,
-                RaceLanguages = race.RaceLanguages,
+                //RaceLanguages = race.RaceLanguages,
                 RaceSpeed = race.RaceSpeed
             };
             return characterRace;
         }
         public async Task<CharacterClass> ClassDTOToClass(CharacterClassDTO characterClassDTO)
         {
+            if(characterClassDTO == null)
+            {
+                return null;
+            }
             CharacterClass characterClass = new CharacterClass()
             {
                 Id = characterClassDTO.Id,
@@ -97,6 +118,10 @@ namespace ExtCharlistAPI
         }
         public async Task<CharacterClassDTO> ClassToClassDTO(CharacterClass characterClass)
         {
+            if(characterClass == null)
+            {
+                return null;
+            }   
             CharacterClassDTO characterClassDTO = new CharacterClassDTO()
             {
                 Id = characterClass.Id,

@@ -16,4 +16,8 @@
     <Folder Include="Components\Pages\у\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\1.png" />
+  </ItemGroup>
+
 </Project>

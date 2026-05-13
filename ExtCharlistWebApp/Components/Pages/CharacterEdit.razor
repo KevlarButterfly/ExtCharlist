@@ -1,49 +1,152 @@
 ﻿@page "/{UserId}/characters/{CharacterId}"
+@using ExtCharistWebApp.Services
 @using ExtCharlistLibrary.DTO
 @using ExtCharlistWebApp.Services
+@using System.Timers
+@inject ILoginService LoginService
 @inject ICharacterService CharacterService
+@inject NavigationManager NavigationManager
+@if(character == null)
+{
+    NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+}
+
+
+
+<style>
+    .successful-save{
+        color = green;
+    }
+
+</style>
 <h3>CharacterEdit</h3>
-Name:<input type="text" name="name" @bind="character.CharacterName"/>
-Class:<select>
-    <option value="value">text</option>
+Name:
+<input type="text" name="name" @bind="character.CharacterName"/>
+Race:<select>
+    @if (Races!= null)
+    {
+        @foreach (CharacterRaceDTO race in Races)
+        {
+            <option value="value" onselect="()=>@character.CharacterRace = race">@race.RaceName</option>
+            
+        }
+    }
+    @if(Races.Count==0){
+    <option value="value">Oops! No races yet.</option>
+    }
 </select>
 
-
-
-
+Class:<select >
+    @if (Classes!=null)
+    {
+        @foreach (CharacterClassDTO _class in Classes)
+        {
+            <option value="value" onselect="()=>@character.CharacterClass = _class">@_class.ClassName</option>
+        }
+    }
+    @if (Classes.Count == 0)
+    {
+        <option value="value">Oops! No classes yet.</option>
+    }
+</select>
+ <br />
+ <button @onclick = "DeleteCharacter">Delete Character</button>
+@* Background:<input type="text", name="bg", @onchange=""/> *@
+<button @onclick="PushChanges">Save changes</button>
+@if (ShowSuccessMessage)
+{
+    <span class="successful-save">character saved successfully</span>
+}
 @code {
     [Parameter]
     public string? UserId { get; set; }
     [Parameter]
     public string? CharacterId { get; set; }
 
-    public CharacterDTO character;
+    public CharacterDTO character = new CharacterDTO();
 
-    public string CharacterName{ get; set; }
+    private Timer timer;
 
-    public List<CharacterClassDTO> CharacterClasses{ get; set; }
-    public List<CharacterRaceDTO> CharacterRaces{ get; set; }
+    public List<CharacterClassDTO> Classes { get; set; } = new List<CharacterClassDTO>();
+    public List<CharacterRaceDTO> Races { get; set; } = new List<CharacterRaceDTO>();
+
+
+    public bool ShowSuccessMessage{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
 
 
-        character = await CharacterService.GetCharacterById(CharacterId);
 
-        while (true)
+        UserDTO signedInUser = await LoginService.GetSignedInUserAsync();
+        if (signedInUser.Id !=UserId)
         {
-            await Task.Delay(300000);
-            await PushChanges();
+            NavigationManager.NavigateTo("/login");
+        }
+        timer = new Timer(300000);
+        timer.Elapsed += Saver;
+        timer.AutoReset = true;
+        await GetRacesAsync();
+        await GetClassesAsync();
+        int max_retries = 5;
+
+        for(int i = 0; i < max_retries; i++)
+        {
+            character = await CharacterService.GetCharacterById(CharacterId);
+            if (character == null)
+            {
+                await Task.Delay(200);
+                character = await CharacterService.GetCharacterById(CharacterId);
+                NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            }
+        }
+        timer.Enabled = true;
+
+    }
+    private void Saver(object? sender, ElapsedEventArgs e)
+    {
+
+        PushChanges();
+    }
+    public async Task GetRacesAsync()
+    {
+        Races = await CharacterService.GetRacesAsync();
+        foreach(CharacterRaceDTO raceDTO in Races)
+        {
+            Console.WriteLine(raceDTO.RaceName);
+        }
+    }
+    public async Task GetClassesAsync()
+    {
+        Classes = await CharacterService.GetClassesAsync();
+    }
+    public async Task PushChanges()
+    {
+        ShowSuccessMessage = await CharacterService.UpdateCharacterAsync(character);
+       
+        
+        // if
+    }
+    public async Task DeleteCharacter()
+    {
+        await CharacterService.DeleteCharacterAsync(CharacterId);
+        NavigationManager.NavigateTo($"/{UserId}/characters/");
+    }
+    public async Task SetClass(string className)
+    {
+        foreach(CharacterClassDTO _class in Classes)
+        {
+            if (_class.ClassName == className) character.CharacterClass = _class;
+        }
+    }
+    public async Task SetRace(string raceName)
+    {
+        foreach (CharacterRaceDTO _race in Races)
+        {
+            if (_race.RaceName == raceName) character.CharacterRace = _race;
         }
     }
 
-    public async Task GetRacesAsync()
-    {
-        
-    }
 
-    public async Task PushChanges()
-    {
-        
-    }
+
 }

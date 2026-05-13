@@ -3,6 +3,7 @@ using ExtCharistWebApp.Services;
 using ExtCharlistWebApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Net;
 
 namespace ExtCharistWebApp
 {
@@ -12,8 +13,8 @@ namespace ExtCharistWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var section = builder.Configuration.GetSection(nameof(APISettings));
-            builder.Services.Configure<APISettings>(section);
+            var section = builder.Configuration.GetSection(nameof(ConnectionSettings));
+            builder.Services.Configure<ConnectionSettings>(section);
 
 
 
@@ -32,8 +33,12 @@ namespace ExtCharistWebApp
 
             });
             builder.Services.AddCascadingAuthenticationState();
+
+            builder.Services.AddSingleton<CookieContainer>();
             builder.Services.AddScoped<ILoginService, LoginService>();
-            builder.Services.AddSingleton<ICharacterService, CharacterService>();
+            builder.Services.AddScoped<ICharacterService, CharacterService>();
+            builder.Services.AddScoped<ICookieService, CookieService>();
+            
 
             //builder.WebHost.UseUrls("http://localhost:7800");
 
@@ -44,7 +49,6 @@ namespace ExtCharistWebApp
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

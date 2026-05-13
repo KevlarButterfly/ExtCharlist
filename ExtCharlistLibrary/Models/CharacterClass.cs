@@ -9,12 +9,12 @@ namespace ExtCharlistLibrary.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
-        [BsonElement("Name")]
-        [JsonPropertyName("Name")]
+        [BsonElement("name")]
+        [JsonPropertyName("name")]
         public string? ClassName { get; set; }
 
-        [BsonElement("hit-die")]
-        [JsonPropertyName("hit-die")]
+        [BsonElement("hit_die")]
+        [JsonPropertyName("hit_die")]
         public int ClassHitDice;
 
         [BsonElement("proficiency_choises")]

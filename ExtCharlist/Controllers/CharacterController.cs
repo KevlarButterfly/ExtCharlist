@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ExtCharlistLibrary.DTO;
 using ZstdSharp.Unsafe;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ExtCharlistAPI.Controllers
 {
@@ -67,10 +68,18 @@ namespace ExtCharlistAPI.Controllers
             return CreatedAtAction(nameof(Get), new { id = newCharacter.Id }, newCharacter);
         }
 
-        [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, CharacterDTO updatedCharacterDTO)
+        [HttpPost("{userId}")]
+        public async Task<string> CreateNewAsync(string userId)
         {
-            var character = await _characterService.GetAsync(id);
+            Character character = new Character();
+            character.UserId = userId;
+            _characterService.CreateAsync(character);
+            return character.Id;
+        }
+        [HttpPut("UpdateCharacter")]
+        public async Task<IActionResult> UpdateAsync([FromBody]CharacterDTO updatedCharacterDTO)
+        {
+            var character = await _characterService.GetAsync(updatedCharacterDTO.Id);
 
             if (character is null)
             {
@@ -81,9 +90,9 @@ namespace ExtCharlistAPI.Controllers
 
             Character updatedCharacter = await _mapper.CharacterDTOToCharacter(updatedCharacterDTO);
 
-            await _characterService.UpdateAsync(id, updatedCharacter);
+            await _characterService.UpdateAsync(character.Id, updatedCharacter);
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id:length(24)}")]

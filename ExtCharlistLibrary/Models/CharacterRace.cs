@@ -41,7 +41,7 @@ namespace ExtCharlistLibrary.Models
 
         [BsonElement("languages")]
         [JsonPropertyName("languages")]
-        public List<string>? RaceLanguages { get; set; }
+        public List<Language>? RaceLanguages { get; set; }
 
         [BsonElement("language_desc")]
         [JsonPropertyName("language_desc")]

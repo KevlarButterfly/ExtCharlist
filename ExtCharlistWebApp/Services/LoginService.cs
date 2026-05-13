@@ -4,91 +4,81 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
+using System.Net;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace ExtCharistWebApp.Services
 {
     public class LoginService:PageModel, ILoginService
     {
-        private APISettings _settings;
+        private ConnectionSettings _settings;
         private AuthenticationStateProvider _stateProvider;
-        public LoginService(IOptions<APISettings> options, AuthenticationStateProvider stateProvider)
+        private ICookieService _cookieService;
+        public LoginService(IOptions<ConnectionSettings> options, AuthenticationStateProvider stateProvider, ICookieService cookieService)
         {
             _settings = options.Value;
             _stateProvider = stateProvider;
+            _cookieService = cookieService;
         }
         public async Task<bool> OnLoginAsync(UserDTO userDTO)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_settings.HostAddress);
+            client.BaseAddress = new Uri(_settings.APIHostAddress);
             var response = await client.GetAsync($"/api/Users/VerifyUser/VerifyUser?email={userDTO.Email}&password={userDTO.Password}");
             if (!response.IsSuccessStatusCode)
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Error {response.StatusCode}: {errorBody}");
+                return false;
             }
-            return response.StatusCode!=System.Net.HttpStatusCode.NotFound && response.StatusCode!=System.Net.HttpStatusCode.NoContent ? true : false;
+            var content = await response.Content.ReadAsStringAsync();
+            UserDTO returned = JsonSerializer.Deserialize<UserDTO>(content);
+
+            await _cookieService.SetSignedInUserAsync(returned, _settings.BlazorDomain);
+
+            //Cookie name = new Cookie("name", returned.UserName);
+            //Cookie email = new Cookie("email", returned.Email);
+            //Cookie id = new Cookie("id", returned.Id);
+            //Cookie role = new Cookie("role", returned.UserRole.Name);
+
+            //_cookies.Add(name);
+            //_cookies.Add(email);
+            //_cookies.Add(id);
+            //_cookies.Add(role);
+
+            return true;
         }
         public async Task<bool> OnRegisterAsync(UserDTO userDTO)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_settings.HostAddress);
+            client.BaseAddress = new Uri(_settings.APIHostAddress);
             var response = await client.PostAsJsonAsync($"/api/Users/VerifyRegister/VerifyRegister", userDTO);
             if (!response.IsSuccessStatusCode)
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Error {response.StatusCode}: {errorBody}");
             }
+            //await _cookieService.SetSignedInUserAsync();
             return response.IsSuccessStatusCode;
         }
-        
-        public async Task<UserDTO>? HasUserSignedIn()
-        {
-            //var principal = await _stateProvider.GetAuthenticationStateAsync();
-            //var claims = principal.User.Claims;
-            UserDTO userDTO = new UserDTO();
-            try
-            {
-                var nameClaim = HttpContext.User;
-                var name = nameClaim.Claims.First(c => c.Type == ClaimTypes.Name).Value;
-                userDTO.UserName = name;
-                var authState = await _stateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-                var IdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
-                var id = IdClaim.Value;
-                userDTO.Id = id;
-                var roleClaim = User.FindFirst(c => c.Type == ClaimTypes.Role);
-                var role = roleClaim.Value;
-                userDTO.UserRole = new(role);
-                Console.WriteLine(name);
-                return userDTO;
-
-            }
-            catch(System.NullReferenceException e)
-            {
-                return null;
-            }
-            
-        }
+       
         public async Task OnLogoutAsync()
         {
-            var authState = await _stateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-            if (user.Identity.IsAuthenticated)
-            {
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(_settings.HostAddress);
-                
-                await HttpContext.SignOutAsync("Cookies");
-            }
+             await  _cookieService.ClearUserCookiesAsync();
         }
 
 
         public async Task<String> GetLoggedIdAsync()
         {
-            var authState = await _stateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-            return user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //
+            UserDTO userDTO = await _cookieService.GetSignedInUserAsync();
+            return userDTO.Id;
+        }
+
+        public async Task<UserDTO>? GetSignedInUserAsync()
+        {
+            return await _cookieService.GetSignedInUserAsync();
         }
     }
 }

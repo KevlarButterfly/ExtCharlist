@@ -1,8 +1,10 @@
 ﻿@page "/{UserId}/characters/"
+@using ExtCharistWebApp.Services
 @using ExtCharlistWebApp.Services
 @using ExtCharlistLibrary.DTO
 @using Microsoft.AspNetCore.Http.Extensions
 @inject ICharacterService CharacterService
+@inject ILoginService LoginService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveAuto
 <PageTitle>huh?</PageTitle>
@@ -14,28 +16,64 @@ else{
         <div @onclick="@(e=>Filler(character.Id))")>
         <h1>Character:@character.CharacterName</h1>
         <ul>
-            <li>Race:@character.CharacterRace.RaceName</li>
-            <li>Class:@character.CharacterClass.ClassName</li>
-            <a href="#"></a>
+                @if (character.CharacterRace != null)
+                {
+                    <li>Race:
+                        @character.CharacterRace.RaceName</li>
+                }
+                @if (character.CharacterClass != null)
+                {
+                    <li>Class:@character.CharacterClass.ClassName</li>
+                }
+                <li>Level:@character.level</li>
         </ul>
         </div>
     }
+
 }
+<div class="char-button-choise">
+    <button @onclick="OnCharacterCreationAsync"> Create new character</button>
+
+</div>
+
 @code {
     IEnumerable<CharacterDTO>? characters;
     [Parameter]
     public string? UserId { get; set; }
     protected override async Task OnInitializedAsync()
     {
+        UserDTO signedInUser = await LoginService.GetSignedInUserAsync();
+        if (signedInUser.Id != UserId)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
         characters = await CharacterService.GetCharactersAsync(UserId);
+        foreach(CharacterDTO character in characters)
+        {
+            Console.WriteLine(character.Id);
+        }
     }
 
     protected async void Filler(string id)
     {
         RedirectToCharacterAsync(id);
     }
+
+    private async Task OnCharacterCreationAsync()
+    {
+        CharacterDTO character = await CharacterService.CreateCharacterAsync();
+        await Task.Delay(1000);
+        await RedirectToCharacterAsync(character.Id);
+    }
+
+    
     protected async Task RedirectToCharacterAsync(string id)
     {
-        NavigationManager.NavigateTo("/{UserId}/characters/" + id);
+        Console.WriteLine("Redirecting to character with id: " + id);
+        NavigationManager.NavigateTo($"/{UserId}/characters/{id}");
     }
-    }
+    
+    
+
+
+}
